@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miel de Wahbi - Miel Naturel de Sidi Bouzid</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fef9f3;
+        }
+
+        header {
+            background: linear-gradient(135deg, #f4a623 0%, #e88b0c 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.3rem;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 16px rgba(244, 166, 35, 0.2);
+            text-align: center;
+        }
+
+        .hero h2 {
+            color: #e88b0c;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .product-section {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 16px rgba(244, 166, 35, 0.2);
+        }
+
+        .product-section h2 {
+            color: #e88b0c;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, #fff8e7 0%, #ffe4b5 100%);
+            border: 3px solid #f4a623;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .product-card h3 {
+            font-size: 2rem;
+            color: #e88b0c;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 3rem;
+            color: #d97706;
+            font-weight: bold;
+            margin: 1.5rem 0;
+        }
+
+        .price span {
+            font-size: 1.5rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature {
+            background: #fff8e7;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #f4a623;
+        }
+
+        .feature h3 {
+            color: #e88b0c;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #f4a623 0%, #e88b0c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(244, 166, 35, 0.3);
+        }
+
+        .contact-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+
+        .contact-btn {
+            background: white;
+            color: #e88b0c;
+            padding: 1.5rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            background: #fef9f3;
+        }
+
+        .whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .whatsapp:hover {
+            background: #20bd5a;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #333;
+            color: white;
+            margin-top: 3rem;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .hero h2, .product-section h2, .contact-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .price {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🍯 Miel de Wahbi 🍯</h1>
+        <p>Miel Naturel de Sidi Bouzid, Tunisie</p>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2>Miel 100% Naturel et Artisanal</h2>
+            <p>Découvrez notre miel authentique, récolté avec soin dans les terres fertiles de Sidi Bouzid. Un produit naturel de qualité supérieure, sans additifs ni conservateurs, pour votre santé et votre bien-être.</p>
+        </div>
+
+        <div class="product-section">
+            <h2>Notre Produit</h2>
+            <div class="product-card">
+                <h3>Miel Naturel Premium</h3>
+                <p>Miel pur et naturel, récolté artisanalement</p>
+                <div class="price">
+                    65 DT <span>/ kg</span>
+                </div>
+                <p style="color: #666; font-size: 1.1rem;">✓ Qualité garantie<br>✓ Production locale<br>✓ Sans traitement chimique</p>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3>🌿 100% Naturel</h3>
+                <p>Miel pur sans additifs, conservateurs ou colorants artificiels</p>
+            </div>
+            <div class="feature">
+                <h3>🐝 Production Artisanale</h3>
+                <p>Récolté et conditionné avec soin selon les méthodes traditionnelles</p>
+            </div>
+            <div class="feature">
+                <h3>🏆 Qualité Supérieure</h3>
+                <p>Miel de qualité premium provenant de Sidi Bouzid</p>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h2>Commander Maintenant</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 1rem;">Contactez-nous pour passer votre commande</p>
+            
+            <div class="contact-buttons">
+                <a href="https://wa.me/21697244049?text=Bonjour,%20je%20suis%20intéressé%20par%20le%20Miel%20de%20Wahbi" class="contact-btn whatsapp" target="_blank">
+                    <span class="icon">📱</span>
+                    WhatsApp: +216 97 244 049
+                </a>
+                <a href="tel:+21697244049" class="contact-btn">
+                    <span class="icon">📞</span>
+                    Appeler: +216 97 244 049
+                </a>
+            </div>
+
+            <p style="margin-top: 2rem; font-size: 1.2rem;">
+                📍 <strong>Localisation:</strong> Sidi Bouzid, Tunisie
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Miel de Wahbi - Tous droits réservés</p>
+        <p>Miel naturel de Sidi Bouzid, Tunisie</p>
+    </footer>
+</body>
+</html>
