@@ -232,12 +232,19 @@
         .product-image {
             position: relative;
             height: 300px;
-            background: linear-gradient(135deg, #ffe4b5 0%, #ffd89b 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
             overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
         }
 
         .product-badge {
@@ -251,6 +258,7 @@
             font-weight: bold;
             font-size: 0.9rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         .product-info {
@@ -299,6 +307,67 @@
             background: var(--primary);
             color: var(--white);
             transform: scale(1.05);
+        }
+
+        /* Quantity Selector */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: #f8f8f8;
+            padding: 1rem;
+            border-radius: 15px;
+        }
+
+        .quantity-label {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        .quantity-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .total-price {
+            text-align: center;
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 1rem;
         }
 
         .order-btn {
@@ -407,6 +476,31 @@
             box-shadow: 0 0 10px var(--shadow);
         }
 
+        .order-summary {
+            background: #f8f8f8;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .order-summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--primary);
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
         .submit-btn {
             width: 100%;
             padding: 1.2rem;
@@ -500,18 +594,31 @@
             <!-- Product 1: Eucalyptus -->
             <div class="product-card">
                 <div class="product-image">
+                    <img src="images/eucalyptus.jpg" alt="Miel d'Eucalyptus">
                     <span class="product-badge">En Stock</span>
-                    🍯
                 </div>
                 <div class="product-info">
                     <h3 class="product-name">Miel d'Eucalyptus</h3>
                     <p class="product-description">Miel aux vertus respiratoires, idéal pour l'hiver</p>
                     <div class="product-price">65 DT / kg</div>
+                    
                     <div class="size-selector">
-                        <button class="size-btn active" data-size="500g" data-price="32.5">500g</button>
-                        <button class="size-btn" data-size="1kg" data-price="65">1kg</button>
+                        <button class="size-btn active" onclick="selectSize(this, '500g', 32.5)">500g</button>
+                        <button class="size-btn" onclick="selectSize(this, '1kg', 65)">1kg</button>
                     </div>
-                    <button class="order-btn" onclick="openOrderModal('Miel d\'Eucalyptus', '500g', '32.5')">
+
+                    <div class="quantity-selector">
+                        <span class="quantity-label">Quantité:</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="decreaseQuantity(this)">−</button>
+                            <span class="quantity-value">1</span>
+                            <button class="quantity-btn" onclick="increaseQuantity(this)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="total-price">Total: <span class="total-amount">32.5</span> DT</div>
+
+                    <button class="order-btn" onclick="openOrderModal(this, 'Miel d\'Eucalyptus')">
                         Commander Maintenant
                     </button>
                 </div>
@@ -520,18 +627,31 @@
             <!-- Product 2: Thym -->
             <div class="product-card">
                 <div class="product-image">
+                    <img src="images/thym.jpg" alt="Miel de Thym">
                     <span class="product-badge">En Stock</span>
-                    🍯
                 </div>
                 <div class="product-info">
                     <h3 class="product-name">Miel de Thym</h3>
                     <p class="product-description">Miel premium aux propriétés antiseptiques exceptionnelles</p>
                     <div class="product-price">65 DT / kg</div>
+                    
                     <div class="size-selector">
-                        <button class="size-btn active" data-size="500g" data-price="32.5">500g</button>
-                        <button class="size-btn" data-size="1kg" data-price="65">1kg</button>
+                        <button class="size-btn active" onclick="selectSize(this, '500g', 32.5)">500g</button>
+                        <button class="size-btn" onclick="selectSize(this, '1kg', 65)">1kg</button>
                     </div>
-                    <button class="order-btn" onclick="openOrderModal('Miel de Thym', '500g', '32.5')">
+
+                    <div class="quantity-selector">
+                        <span class="quantity-label">Quantité:</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="decreaseQuantity(this)">−</button>
+                            <span class="quantity-value">1</span>
+                            <button class="quantity-btn" onclick="increaseQuantity(this)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="total-price">Total: <span class="total-amount">32.5</span> DT</div>
+
+                    <button class="order-btn" onclick="openOrderModal(this, 'Miel de Thym')">
                         Commander Maintenant
                     </button>
                 </div>
@@ -540,18 +660,31 @@
             <!-- Product 3: Fleurs -->
             <div class="product-card">
                 <div class="product-image">
+                    <img src="images/fleurs.jpg" alt="Miel de Fleurs">
                     <span class="product-badge">En Stock</span>
-                    🍯
                 </div>
                 <div class="product-info">
                     <h3 class="product-name">Miel de Fleurs</h3>
                     <p class="product-description">Miel polyfloral doux et parfumé, récolte artisanale</p>
                     <div class="product-price">65 DT / kg</div>
+                    
                     <div class="size-selector">
-                        <button class="size-btn active" data-size="500g" data-price="32.5">500g</button>
-                        <button class="size-btn" data-size="1kg" data-price="65">1kg</button>
+                        <button class="size-btn active" onclick="selectSize(this, '500g', 32.5)">500g</button>
+                        <button class="size-btn" onclick="selectSize(this, '1kg', 65)">1kg</button>
                     </div>
-                    <button class="order-btn" onclick="openOrderModal('Miel de Fleurs', '500g', '32.5')">
+
+                    <div class="quantity-selector">
+                        <span class="quantity-label">Quantité:</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="decreaseQuantity(this)">−</button>
+                            <span class="quantity-value">1</span>
+                            <button class="quantity-btn" onclick="increaseQuantity(this)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="total-price">Total: <span class="total-amount">32.5</span> DT</div>
+
+                    <button class="order-btn" onclick="openOrderModal(this, 'Miel de Fleurs')">
                         Commander Maintenant
                     </button>
                 </div>
@@ -560,18 +693,31 @@
             <!-- Product 4: Agrumes -->
             <div class="product-card">
                 <div class="product-image">
+                    <img src="images/agrumes.jpg" alt="Miel d'Agrumes">
                     <span class="product-badge">En Stock</span>
-                    🍯
                 </div>
                 <div class="product-info">
                     <h3 class="product-name">Miel d'Agrumes</h3>
                     <p class="product-description">Miel fruité et délicat, parfum d'orangers et citronniers</p>
                     <div class="product-price">65 DT / kg</div>
+                    
                     <div class="size-selector">
-                        <button class="size-btn active" data-size="500g" data-price="32.5">500g</button>
-                        <button class="size-btn" data-size="1kg" data-price="65">1kg</button>
+                        <button class="size-btn active" onclick="selectSize(this, '500g', 32.5)">500g</button>
+                        <button class="size-btn" onclick="selectSize(this, '1kg', 65)">1kg</button>
                     </div>
-                    <button class="order-btn" onclick="openOrderModal('Miel d\'Agrumes', '500g', '32.5')">
+
+                    <div class="quantity-selector">
+                        <span class="quantity-label">Quantité:</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="decreaseQuantity(this)">−</button>
+                            <span class="quantity-value">1</span>
+                            <button class="quantity-btn" onclick="increaseQuantity(this)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="total-price">Total: <span class="total-amount">32.5</span> DT</div>
+
+                    <button class="order-btn" onclick="openOrderModal(this, 'Miel d\'Agrumes')">
                         Commander Maintenant
                     </button>
                 </div>
@@ -583,21 +729,26 @@
     <div class="modal" id="orderModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2>🍯 Passer Commande</h2>
+            <h2>🍯 Finaliser la Commande</h2>
             
-            <div class="form-group">
-                <label>Produit</label>
-                <input type="text" id="productName" readonly>
-            </div>
-
-            <div class="form-group">
-                <label>Quantité</label>
-                <input type="text" id="productSize" readonly>
-            </div>
-
-            <div class="form-group">
-                <label>Prix Total</label>
-                <input type="text" id="productPrice" readonly>
+            <div class="order-summary">
+                <h3 style="margin-bottom: 1rem; color: var(--secondary);">Récapitulatif</h3>
+                <div class="order-summary-item">
+                    <span>Produit:</span>
+                    <span id="summaryProduct"></span>
+                </div>
+                <div class="order-summary-item">
+                    <span>Taille:</span>
+                    <span id="summarySize"></span>
+                </div>
+                <div class="order-summary-item">
+                    <span>Quantité:</span>
+                    <span id="summaryQuantity"></span>
+                </div>
+                <div class="order-summary-total">
+                    <span>TOTAL:</span>
+                    <span id="summaryTotal"></span>
+                </div>
             </div>
 
             <div class="form-group">
@@ -656,30 +807,70 @@
     </footer>
 
     <script>
-        // Size selector functionality
-        document.querySelectorAll('.size-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const card = this.closest('.product-card');
-                card.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                const orderBtn = card.querySelector('.order-btn');
-                const productName = card.querySelector('.product-name').textContent;
-                const size = this.dataset.size;
-                const price = this.dataset.price;
-                
-                orderBtn.setAttribute('onclick', `openOrderModal('${productName}', '${size}', '${price}')`);
-            });
-        });
+        let currentOrderData = {};
 
         function scrollToProducts() {
             document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function openOrderModal(productName, size, price) {
-            document.getElementById('productName').value = productName;
-            document.getElementById('productSize').value = size;
-            document.getElementById('productPrice').value = price + ' DT';
+        function selectSize(btn, size, price) {
+            const card = btn.closest('.product-card');
+            card.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            updateTotal(card, price);
+        }
+
+        function increaseQuantity(btn) {
+            const card = btn.closest('.product-card');
+            const valueSpan = card.querySelector('.quantity-value');
+            let quantity = parseInt(valueSpan.textContent);
+            quantity++;
+            valueSpan.textContent = quantity;
+            
+            const activeSize = card.querySelector('.size-btn.active');
+            const unitPrice = activeSize.textContent === '500g' ? 32.5 : 65;
+            updateTotal(card, unitPrice);
+        }
+
+        function decreaseQuantity(btn) {
+            const card = btn.closest('.product-card');
+            const valueSpan = card.querySelector('.quantity-value');
+            let quantity = parseInt(valueSpan.textContent);
+            if (quantity > 1) {
+                quantity--;
+                valueSpan.textContent = quantity;
+                
+                const activeSize = card.querySelector('.size-btn.active');
+                const unitPrice = activeSize.textContent === '500g' ? 32.5 : 65;
+                updateTotal(card, unitPrice);
+            }
+        }
+
+        function updateTotal(card, unitPrice) {
+            const quantity = parseInt(card.querySelector('.quantity-value').textContent);
+            const total = (unitPrice * quantity).toFixed(2);
+            card.querySelector('.total-amount').textContent = total;
+        }
+
+        function openOrderModal(btn, productName) {
+            const card = btn.closest('.product-card');
+            const size = card.querySelector('.size-btn.active').textContent;
+            const quantity = card.querySelector('.quantity-value').textContent;
+            const total = card.querySelector('.total-amount').textContent;
+
+            currentOrderData = {
+                product: productName,
+                size: size,
+                quantity: quantity,
+                total: total
+            };
+
+            document.getElementById('summaryProduct').textContent = productName;
+            document.getElementById('summarySize').textContent = size;
+            document.getElementById('summaryQuantity').textContent = quantity;
+            document.getElementById('summaryTotal').textContent = total + ' DT';
+
             document.getElementById('orderModal').classList.add('active');
         }
 
@@ -693,10 +884,6 @@
             const city = document.getElementById('customerCity').value;
             const address = document.getElementById('customerAddress').value;
             const message = document.getElementById('customerMessage').value;
-            
-            const product = document.getElementById('productName').value;
-            const size = document.getElementById('productSize').value;
-            const price = document.getElementById('productPrice').value;
 
             if (!name || !phone || !city || !address) {
                 alert('Veuillez remplir tous les champs obligatoires (*)');
@@ -705,15 +892,17 @@
 
             let whatsappMessage = `🍯 *NOUVELLE COMMANDE - MIEL DE WAHBI*
 
-📦 *Produit:* ${product}
-⚖️ *Quantité:* ${size}
-💰 *Prix Total:* ${price}
+📦 *COMMANDE:*
+• Produit: ${currentOrderData.product}
+• Taille: ${currentOrderData.size}
+• Quantité: ${currentOrderData.quantity}
+💰 *TOTAL: ${currentOrderData.total} DT*
 
 👤 *CLIENT:*
-Nom: ${name}
-📞 Téléphone: ${phone}
-🏙️ Ville: ${city}
-📍 Adresse: ${address}`;
+• Nom: ${name}
+• 📞 Téléphone: ${phone}
+• 🏙️ Ville: ${city}
+• 📍 Adresse: ${address}`;
 
             if (message) {
                 whatsappMessage += `
@@ -728,7 +917,6 @@ Nom: ${name}
             alert('Merci ! Votre commande va être envoyée via WhatsApp. Nous vous contacterons rapidement ! 🍯');
         }
 
-        // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('orderModal');
             if (event.target == modal) {
