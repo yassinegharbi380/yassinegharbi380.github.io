@@ -162,21 +162,29 @@ function handleSizeSelection(event) {
     const size = event.currentTarget.dataset.size;
     const price = parseFloat(event.currentTarget.dataset.price);
     
-    // Retirer classe active
+    // Retirer la classe active des autres boutons
     card.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
     event.currentTarget.classList.add('active');
     
-    // Mettre à jour le prix principal
+    // AJOUTER CETTE LIGNE :
+    updateProductPrice(card, size, price);
+    
+    // Ajouter l'effet ripple
+    createRipple(event);
+}
+
+function updateProductPrice(card, size, price) {
     const priceValue = card.querySelector('.price-value');
     const priceCurrency = card.querySelector('.price-currency');
     
     if (priceValue && priceCurrency) {
+        // Animation de changement de prix
         priceValue.style.transform = 'scale(1.2)';
         priceValue.style.color = 'var(--primary-dark)';
         
         setTimeout(() => {
             priceValue.textContent = price;
-            priceCurrency.textContent = size === '500g' ? 'DT' : 'DT / kg';
+            priceCurrency.textContent = `DT / ${size}`;
             
             setTimeout(() => {
                 priceValue.style.transform = 'scale(1)';
@@ -184,9 +192,6 @@ function handleSizeSelection(event) {
             }, 200);
         }, 150);
     }
-    
-    // Ripple effect
-    createRipple(event);
 }
 
 function createRipple(event) {
