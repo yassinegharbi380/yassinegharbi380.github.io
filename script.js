@@ -33,6 +33,7 @@ function initializeApp() {
             offset: 100
         });
     }
+    initializeProductPrices();
 }
 
 // ============= ADVANCED ANIMATIONS =============
@@ -84,6 +85,7 @@ function initializeAnimations() {
         observer.observe(card);
     });
 }
+
 
 // ============= PARTICLE SYSTEM =============
 function initializeParticles() {
@@ -192,6 +194,26 @@ function updateProductPrice(card, size, price) {
             }, 200);
         }, 150);
     }
+}
+
+// ============= INITIALIZE PRODUCT PRICES ON LOAD =============
+function initializeProductPrices() {
+    document.querySelectorAll('.product-card').forEach(card => {
+        const activeBtn = card.querySelector('.size-btn.active');
+        if (activeBtn) {
+            const size = activeBtn.dataset.size;
+            const price = parseFloat(activeBtn.dataset.price);
+            
+            // Mettre à jour le prix sans animation au chargement
+            const priceValue = card.querySelector('.price-value');
+            const priceCurrency = card.querySelector('.price-currency');
+            
+            if (priceValue && priceCurrency) {
+                priceValue.textContent = price;
+                priceCurrency.textContent = size === '500g' ? 'DT' : 'DT / kg';
+            }
+        }
+    });
 }
 
 function createRipple(event) {
