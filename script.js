@@ -189,27 +189,6 @@ function handleSizeSelection(event) {
     createRipple(event);
 }
 
-function updateProductPrice(card, size, price) {
-    const priceValue = card.querySelector('.price-value');
-    const priceCurrency = card.querySelector('.price-currency');
-    
-    if (priceValue && priceCurrency) {
-        // Animation de changement de prix
-        priceValue.style.transform = 'scale(1.2)';
-        priceValue.style.color = 'var(--primary-dark)';
-        
-        setTimeout(() => {
-            priceValue.textContent = price;
-            priceCurrency.textContent = `DT / ${size}`;
-            
-            setTimeout(() => {
-                priceValue.style.transform = 'scale(1)';
-                priceValue.style.color = '';
-            }, 200);
-        }, 150);
-    }
-}
-
 function createRipple(event) {
     const button = event.currentTarget;
     const ripple = document.createElement('span');
