@@ -567,11 +567,51 @@
             margin-bottom: 1.5rem;
         }
 
+        .order-summary h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
         .order-summary-item {
             display: flex;
             justify-content: space-between;
             margin-bottom: 0.5rem;
             font-size: 1rem;
+        }
+
+        .delivery-info {
+            background: #e8f5e9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border-left: 4px solid #4caf50;
+        }
+
+        .delivery-info.paid {
+            background: #fff3e0;
+            border-left-color: var(--primary);
+        }
+
+        .delivery-info p {
+            margin: 0.3rem 0;
+            font-size: 0.9rem;
+        }
+
+        .order-summary-subtotal {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+            font-size: 1.1rem;
+        }
+
+        .order-summary-delivery {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            color: var(--primary);
         }
 
         .order-summary-total {
@@ -861,9 +901,23 @@
                     <span>Quantité:</span>
                     <span id="summaryQuantity"></span>
                 </div>
+                
+                <div class="order-summary-subtotal">
+                    <span>Sous-total:</span>
+                    <span id="summarySubtotal"></span>
+                </div>
+                <div class="order-summary-delivery">
+                    <span>Livraison:</span>
+                    <span id="summaryDelivery">Calculé selon ville</span>
+                </div>
                 <div class="order-summary-total">
                     <span>TOTAL:</span>
                     <span id="summaryTotal"></span>
+                </div>
+
+                <div class="delivery-info" id="deliveryInfo" style="display: none;">
+                    <p><strong>📍 Livraison</strong></p>
+                    <p id="deliveryMessage"></p>
                 </div>
             </div>
 
@@ -878,8 +932,35 @@
             </div>
 
             <div class="form-group">
-                <label>Ville de Livraison *</label>
-                <input type="text" id="customerCity" placeholder="Ex: Tunis, Sfax, Sousse..." required>
+                <label>Gouvernorat de Livraison *</label>
+                <select id="customerCity" required onchange="calculateDelivery()">
+                    <option value="">-- Sélectionnez votre gouvernorat --</option>
+                    <option value="Ariana">Ariana</option>
+                    <option value="Béja">Béja</option>
+                    <option value="Ben Arous">Ben Arous</option>
+                    <option value="Bizerte">Bizerte</option>
+                    <option value="Gabès">Gabès</option>
+                    <option value="Gafsa">Gafsa</option>
+                    <option value="Jendouba">Jendouba</option>
+                    <option value="Kairouan">Kairouan</option>
+                    <option value="Kasserine">Kasserine</option>
+                    <option value="Kébili">Kébili</option>
+                    <option value="Le Kef">Le Kef</option>
+                    <option value="Mahdia">Mahdia</option>
+                    <option value="Manouba">Manouba</option>
+                    <option value="Médenine">Médenine</option>
+                    <option value="Monastir">Monastir</option>
+                    <option value="Nabeul">Nabeul</option>
+                    <option value="Sfax">Sfax</option>
+                    <option value="Sidi Bouzid">Sidi Bouzid</option>
+                    <option value="Siliana">Siliana</option>
+                    <option value="Sousse">Sousse</option>
+                    <option value="Tataouine">Tataouine</option>
+                    <option value="Tozeur">Tozeur</option>
+                    <option value="Tunis">Tunis</option>
+                    <option value="Zaghouan">Zaghouan</option>
+                </select>
+                <small style="color: #666; font-size: 0.85rem; display: block; margin-top: 0.5rem;">🎁 Livraison gratuite à Sidi Bouzid !</small>
             </div>
 
             <div class="form-group">
@@ -959,6 +1040,7 @@
     <script>
         let currentOrderData = {};
         let currentMessage = '';
+        let deliveryFee = 0;
 
         function scrollToProducts() {
             document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
@@ -1014,15 +1096,56 @@
                 product: productName,
                 size: size,
                 quantity: quantity,
-                total: total
+                subtotal: parseFloat(total)
             };
 
             document.getElementById('summaryProduct').textContent = productName;
             document.getElementById('summarySize').textContent = size;
             document.getElementById('summaryQuantity').textContent = quantity;
+            document.getElementById('summarySubtotal').textContent = total + ' DT';
+            
+            // Reset delivery
+            deliveryFee = 0;
+            document.getElementById('customerCity').value = '';
+            document.getElementById('summaryDelivery').textContent = 'Calculé selon ville';
             document.getElementById('summaryTotal').textContent = total + ' DT';
+            document.getElementById('deliveryInfo').style.display = 'none';
 
             document.getElementById('orderModal').classList.add('active');
+        }
+
+        function calculateDelivery() {
+            const city = document.getElementById('customerCity').value;
+            const subtotal = currentOrderData.subtotal;
+            
+            if (!city) {
+                deliveryFee = 0;
+                document.getElementById('summaryDelivery').textContent = 'Calculé selon gouvernorat';
+                document.getElementById('summaryTotal').textContent = subtotal.toFixed(2) + ' DT';
+                document.getElementById('deliveryInfo').style.display = 'none';
+                return;
+            }
+
+            const deliveryInfo = document.getElementById('deliveryInfo');
+            const deliveryMessage = document.getElementById('deliveryMessage');
+            
+            // Check if city is Sidi Bouzid
+            if (city === 'Sidi Bouzid') {
+                deliveryFee = 0;
+                document.getElementById('summaryDelivery').textContent = 'GRATUIT 🎁';
+                deliveryInfo.className = 'delivery-info';
+                deliveryInfo.style.display = 'block';
+                deliveryMessage.innerHTML = '🎉 <strong>Livraison gratuite</strong> pour Sidi Bouzid !';
+            } else {
+                deliveryFee = 5;
+                document.getElementById('summaryDelivery').textContent = '5 DT';
+                deliveryInfo.className = 'delivery-info paid';
+                deliveryInfo.style.display = 'block';
+                deliveryMessage.innerHTML = '🚚 Frais de livraison: <strong>5 DT</strong>';
+            }
+
+            const total = subtotal + deliveryFee;
+            document.getElementById('summaryTotal').textContent = total.toFixed(2) + ' DT';
         }
 
         function closeModal() {
@@ -1139,12 +1262,17 @@
                 return null;
             }
 
+            const subtotal = currentOrderData.subtotal;
+            const total = subtotal + deliveryFee;
+
             return {
                 name, phone, city, address, message,
                 product: currentOrderData.product,
                 size: currentOrderData.size,
                 quantity: currentOrderData.quantity,
-                total: currentOrderData.total
+                subtotal: subtotal.toFixed(2),
+                deliveryFee: deliveryFee.toFixed(2),
+                total: total.toFixed(2)
             };
         }
 
@@ -1155,6 +1283,8 @@
 • Produit: ${data.product}
 • Taille: ${data.size}
 • Quantité: ${data.quantity}
+• Sous-total: ${data.subtotal} DT
+• Livraison: ${data.deliveryFee === '0.00' ? 'GRATUITE 🎁' : data.deliveryFee + ' DT'}
 💰 TOTAL: ${data.total} DT
 
 👤 CLIENT:
