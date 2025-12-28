@@ -143,6 +143,7 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ============= EVENT LISTENERS =============
+// ============= EVENT LISTENERS =============
 function attachEventListeners() {
     // Size button handlers
     document.querySelectorAll('.size-btn').forEach(btn => {
@@ -161,18 +162,32 @@ function handleSizeSelection(event) {
     const size = event.currentTarget.dataset.size;
     const price = parseFloat(event.currentTarget.dataset.price);
     
-    // Retirer la classe active des autres boutons
+    // Retirer classe active
     card.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
     event.currentTarget.classList.add('active');
     
-    // AJOUTER CETTE LIGNE :
-    updateProductPrice(card, size, price);
+    // Mettre à jour le prix principal
+    const priceValue = card.querySelector('.price-value');
+    const priceCurrency = card.querySelector('.price-currency');
     
-    // Ajouter l'effet ripple
+    if (priceValue && priceCurrency) {
+        priceValue.style.transform = 'scale(1.2)';
+        priceValue.style.color = 'var(--primary-dark)';
+        
+        setTimeout(() => {
+            priceValue.textContent = price;
+            priceCurrency.textContent = size === '500g' ? 'DT' : 'DT / kg';
+            
+            setTimeout(() => {
+                priceValue.style.transform = 'scale(1)';
+                priceValue.style.color = '';
+            }, 200);
+        }, 150);
+    }
+    
+    // Ripple effect
     createRipple(event);
 }
-
-// Ajouter après la fonction handleSizeSelection()
 
 function updateProductPrice(card, size, price) {
     const priceValue = card.querySelector('.price-value');
