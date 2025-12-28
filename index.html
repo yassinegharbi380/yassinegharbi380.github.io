@@ -408,6 +408,90 @@
             display: flex;
         }
 
+        /* Message Preview Modal */
+        .message-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .message-modal.active {
+            display: flex;
+        }
+
+        .message-preview {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease-out;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .message-preview h2 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .copied-notification {
+            background: #10b981;
+            color: white;
+            padding: 0.8rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .message-text {
+            background: #f8f8f8;
+            padding: 1.5rem;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--primary);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .message-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .copy-again-btn {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-again-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
         .modal-content {
             background: var(--white);
             padding: 3rem;
@@ -822,6 +906,32 @@
         </div>
     </div>
 
+    <!-- Message Preview Modal for Facebook -->
+    <div class="message-modal" id="messageModal">
+        <div class="message-preview">
+            <span class="close-modal" onclick="closeMessageModal()">&times;</span>
+            <h2>💬 Message à envoyer</h2>
+            
+            <div class="copied-notification" id="copiedNotification">
+                ✅ Message copié automatiquement !
+            </div>
+
+            <div class="message-text" id="messageText"></div>
+
+            <div class="message-actions">
+                <button class="copy-again-btn" onclick="copyMessageAgain()">
+                    📋 Copier à nouveau
+                </button>
+                <button class="submit-btn facebook-btn" onclick="openMessenger()">
+                    💬 Ouvrir Facebook Messenger
+                </button>
+                <button class="copy-again-btn" style="background: #666;" onclick="closeMessageModal()">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -848,6 +958,7 @@
 
     <script>
         let currentOrderData = {};
+        let currentMessage = '';
 
         function scrollToProducts() {
             document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
@@ -933,11 +1044,67 @@
             const orderData = getOrderData();
             if (!orderData) return;
 
-            let facebookMessage = formatOrderMessage(orderData);
-            const facebookURL = `https://m.me/abdel.gharbi.7?text=${encodeURIComponent(facebookMessage)}`;
-            window.open(facebookURL, '_blank');
+            currentMessage = formatOrderMessage(orderData);
             
-            showSuccessMessage('Facebook Messenger');
+            // Copy message to clipboard
+            copyToClipboard(currentMessage);
+            
+            // Show message preview modal
+            document.getElementById('messageText').textContent = currentMessage;
+            document.getElementById('messageModal').classList.add('active');
+            
+            closeModal();
+        }
+
+        function copyToClipboard(text) {
+            // Modern way
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    console.log('Message copied to clipboard');
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    fallbackCopy(text);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function copyMessageAgain() {
+            copyToClipboard(currentMessage);
+            
+            // Show notification
+            const notification = document.getElementById('copiedNotification');
+            notification.style.display = 'block';
+            notification.textContent = '✅ Message copié à nouveau !';
+            
+            setTimeout(() => {
+                notification.textContent = '✅ Message copié automatiquement !';
+            }, 2000);
+        }
+
+        function openMessenger() {
+            window.open('https://m.me/abdel.gharbi.7', '_blank');
+        }
+
+        function closeMessageModal() {
+            document.getElementById('messageModal').classList.remove('active');
         }
 
         function callPhone() {
@@ -1012,8 +1179,12 @@
 
         window.onclick = function(event) {
             const modal = document.getElementById('orderModal');
+            const messageModal = document.getElementById('messageModal');
             if (event.target == modal) {
                 closeModal();
+            }
+            if (event.target == messageModal) {
+                closeMessageModal();
             }
         }
     </script>
